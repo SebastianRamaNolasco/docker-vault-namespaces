@@ -48,11 +48,18 @@ output "bu_kv_reader_policy_ids" {
   }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> origin/main
 output "debug_bu0001_ns_name" {
   value = module.bu_config_instance_0001.bu_namespace_name
 }
 output "debug_bu0001_policy_name" {
   value = module.bu_config_instance_0001.policy_name
+<<<<<<< HEAD
 }
 >>>>>>> 5c90157 (fixing mappings and acls)
+=======
+}
+>>>>>>> origin/main
