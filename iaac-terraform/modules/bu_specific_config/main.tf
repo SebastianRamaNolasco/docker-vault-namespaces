@@ -1,40 +1,36 @@
-terraform { /* ... required_providers ... */ }
+# modules/bu_specific_config/main.tf
 
+terraform {
+  required_providers {
+    vault = {
+      source = "hashicorp/vault"
+    }
+  }
+}
 
 resource "vault_policy" "bu_kv_reader_policy" {
   name     = "kv-reader"
-  # This policy is created in the child namespace (e.g., admin/bu-0001)
 
   policy = <<-EOT
-    # Templated access based on the 'team' metadata of the canonical central group.
-    # The entity is part of a group whose ID is var.central_reader_group_id.
-    # We need to access metadata of that specific group.
-    # entity.groups.ids.<group_id>.metadata.<key>
-    path "secrets/data/{{identity.groups.ids['${var.central_reader_group_id}'].metadata.team}}/*" {
-      capabilities = ["read"]
+    # Grant read-only access to all secrets under the 'secrets' KV engine
+    # mounted in this namespace.
+    path "secrets/data/*" {
+      capabilities = ["read", "list"]
     }
-    path "secrets/metadata/{{identity.groups.ids['${var.central_reader_group_id}'].metadata.team}}/*" {
-      capabilities = ["list", "read"]
+    path "secrets/metadata/*" { # Needed for UI and some CLI list operations with KV v2
+      capabilities = ["list"]
     }
 
-    # Grant access to the specific example secret (application1 for bu-0001).
-    ${ var.specific_application_secret_name != null ? <<-SPECIFIC_SECRET
-    path "secrets/data/${var.specific_application_secret_name}" {
+    # ADD THIS SECTION:
+    # Allow access to the internal UI path for the 'secrets' mount.
+    # This is required by recent Vault CLI versions for kv operations.
+    # The path is relative to the namespace where the policy is applied.
+    path "sys/internal/ui/mounts/secrets" {
       capabilities = ["read"]
     }
-    path "secrets/metadata/${var.specific_application_secret_name}" {
-      capabilities = ["list", "read"]
+    # It might also need access to sub-paths for specific secrets, so be generous or specific:
+    path "sys/internal/ui/mounts/secrets/*" { # More permissive for any secret under the mount
+      capabilities = ["read"]
     }
-    SPECIFIC_SECRET
-    : "" }
   EOT
-}
-
-# Assign this policy (which exists in the child NS) to the CANONICAL group from the parent NS.
-resource "vault_identity_group_policies" "assign_kv_reader_to_central_group_in_child_ns" {
-  # Provider context is the child namespace (e.g., admin/bu-0001)
-  group_id = var.central_reader_group_id # ID of the group from 'admin' namespace
-  policies = [vault_policy.bu_kv_reader_policy.name] # Policy from this child namespace
-  exclusive = false
-  namespace = "admin"
 }
