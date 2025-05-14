@@ -1,4 +1,3 @@
-# modules/bu_specific_config/outputs.tf
 
 output "policy_name" {
   description = "The simple name of the KV reader policy created." # e.g., "kv-reader"

@@ -36,9 +36,7 @@ resource "vault_generic_endpoint" "userpass_users" {
     vault_identity_group.central_reader_groups
   ]
 }
-# identity_global.tf (or policy_assignments.tf)
 
-# ... (other resources like central_reader_groups, userpass_admin, etc.) ...
 
 resource "vault_identity_group_policies" "assign_bu0001_policy_to_app1_reader" {
   provider = vault.ns_admin # Operate in the 'admin' namespace
@@ -73,27 +71,3 @@ resource "vault_identity_group_policies" "assign_bu0003_policy_to_app3_reader" {
   exclusive = false
   depends_on = [module.bu_config_instance_0003]
 }
-# --- Data sources for BU namespace's "token" auth method accessors ---
-/* data "vault_auth_backend" "token_auth_ns_admin_bu0001" {
-  provider   = vault.ns_admin_bu0001
-  path       = "token"
-  depends_on = [vault_namespace.bu["0001"]]
-}
-data "vault_auth_backend" "token_auth_ns_admin_bu0002" {
-  provider   = vault.ns_admin_bu0002
-  path       = "token"
-  depends_on = [vault_namespace.bu["0002"]]
-}
-data "vault_auth_backend" "token_auth_ns_admin_bu0003" {
-  provider   = vault.ns_admin_bu0003
-  path       = "token"
-  depends_on = [vault_namespace.bu["0003"]]
-}
- */
-/* locals {
-  bu_identity_related_accessors = {
-    "0001" = data.vault_auth_backend.token_auth_ns_admin_bu0001.accessor
-    "0002" = data.vault_auth_backend.token_auth_ns_admin_bu0002.accessor
-    "0003" = data.vault_auth_backend.token_auth_ns_admin_bu0003.accessor
-  }
-} */

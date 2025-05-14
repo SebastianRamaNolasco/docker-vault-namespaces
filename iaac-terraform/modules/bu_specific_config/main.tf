@@ -1,4 +1,3 @@
-# modules/bu_specific_config/main.tf
 
 terraform {
   required_providers {

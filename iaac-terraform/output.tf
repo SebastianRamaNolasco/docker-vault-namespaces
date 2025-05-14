@@ -19,7 +19,6 @@ output "userpass_admin_accessor" {
   value = vault_auth_backend.userpass_admin.accessor
 }
 
-# --- CORRECTED OUTPUTS ---
 output "bu_kv_reader_policy_names" {
   description = "Names of the KV reader policies created for each BU."
   value = {
@@ -30,14 +29,7 @@ output "bu_kv_reader_policy_names" {
   }
 }
 
-/* output "bu_group_alias_ids" {
-  description = "IDs of the group aliases created for each BU."
-  value = {
-    "0001" = module.bu_config_instance_0001.group_alias_id
-    "0002" = module.bu_config_instance_0002.group_alias_id
-    "0003" = module.bu_config_instance_0003.group_alias_id
-  }
-} */
+
 
 output "bu_kv_reader_policy_ids" {
   description = "IDs of the KV reader policies created for each BU."

@@ -1,5 +1,4 @@
 
-# Instance for BU-0001
 module "bu_config_instance_0001" {
   source = "./modules/bu_specific_config"
   providers = { vault = vault.ns_admin_bu0001 }
