@@ -26,10 +26,7 @@ output "bu_kv_reader_policy_names" {
     "0001" = module.bu_config_instance_0001.policy_name
     "0002" = module.bu_config_instance_0002.policy_name
     "0003" = module.bu_config_instance_0003.policy_name
-    # You can also construct this with a loop if you prefer, but explicit is fine for 3
-    # Example with a loop (less direct if module names vary too much from keys):
-    # for k, bu_detail in var.bu_details : k => module.bu_config_instance_${k}.policy_name
-    # However, module names are bu_config_instance_0001 etc. not bu_config_instance_bu-0001
+    
   }
 }
 
