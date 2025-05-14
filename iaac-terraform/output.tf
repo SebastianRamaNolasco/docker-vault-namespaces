@@ -39,7 +39,6 @@ output "bu_kv_reader_policy_names" {
   }
 } */
 
-# You might want other outputs from the module as well, e.g., policy IDs
 output "bu_kv_reader_policy_ids" {
   description = "IDs of the KV reader policies created for each BU."
   value = {
