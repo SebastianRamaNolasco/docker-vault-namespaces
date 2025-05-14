@@ -36,7 +36,43 @@ resource "vault_generic_endpoint" "userpass_users" {
     vault_identity_group.central_reader_groups
   ]
 }
+# identity_global.tf (or policy_assignments.tf)
 
+# ... (other resources like central_reader_groups, userpass_admin, etc.) ...
+
+resource "vault_identity_group_policies" "assign_bu0001_policy_to_app1_reader" {
+  provider = vault.ns_admin # Operate in the 'admin' namespace
+
+  group_id = vault_identity_group.central_reader_groups["0001"].id
+  policies = [
+    # Policy name is "bu-0001/kv-reader" relative to the 'admin' namespace
+    "${module.bu_config_instance_0001.bu_namespace_name}/${module.bu_config_instance_0001.policy_name}"
+  ]
+  exclusive = false
+  depends_on = [module.bu_config_instance_0001]
+}
+
+resource "vault_identity_group_policies" "assign_bu0002_policy_to_app2_reader" {
+  provider = vault.ns_admin
+
+  group_id = vault_identity_group.central_reader_groups["0002"].id
+  policies = [
+    "${module.bu_config_instance_0002.bu_namespace_name}/${module.bu_config_instance_0002.policy_name}"
+  ]
+  exclusive = false
+  depends_on = [module.bu_config_instance_0002]
+}
+
+resource "vault_identity_group_policies" "assign_bu0003_policy_to_app3_reader" {
+  provider = vault.ns_admin
+
+  group_id = vault_identity_group.central_reader_groups["0003"].id
+  policies = [
+    "${module.bu_config_instance_0003.bu_namespace_name}/${module.bu_config_instance_0003.policy_name}"
+  ]
+  exclusive = false
+  depends_on = [module.bu_config_instance_0003]
+}
 # --- Data sources for BU namespace's "token" auth method accessors ---
 /* data "vault_auth_backend" "token_auth_ns_admin_bu0001" {
   provider   = vault.ns_admin_bu0001
