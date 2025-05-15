@@ -1,7 +1,7 @@
 resource "vault_mount" "bu_kv" {
   for_each = var.bu_details
   provider = vault.ns_admin # The mount itself is configured from the parent namespace
-  
+
   namespace = vault_namespace.bu[each.key].path_fq # Target namespace path e.g., admin/bu-0001
   path      = "secrets"                            # Mount path within the target namespace
   type      = "kv"
